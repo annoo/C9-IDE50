@@ -1,0 +1,37 @@
+
+First, use the matrix dereferencing to fill the array.
+
+Done!
+Second, use the matrix dereferencing to display the array.
+
+15 14 13 12
+11 10 9 8
+7 6 5 4
+3 2 1 0
+
+Third, use the pointer dereferencing to display the array.
+
+15 14 13 12
+11 10 9 8
+7 6 5 4
+3 2 1 0
+
+Forth, use the pointer dereferencing to negate the array.
+
+Done!
+
+Fifth, use the pointer dereferencing to display the NEW array.
+
+-15 -14 -13 -12
+-11 -10 -9 -8
+-7 -6 -5 -4
+-3 -2 -1 0
+Done!
+
+Sixth, use the pointer dereferencing with '++' to display the NEW array.
+
+-15 -14 -13 -12
+-11 -10 -9 -8
+-7 -6 -5 -4
+-3 -2 -1 0
+Done!
