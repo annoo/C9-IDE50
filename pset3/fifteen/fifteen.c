@@ -67,7 +67,8 @@ bool won(void);
 
 void PointToEmptySpace(int i);
 int MakeMovableTilesArray(void);
-bool CheckBoundaries(int* ptr);
+bool CheckonBoard(int* ptrSpace, int* ptr2);
+void addTile(int n);
 void solvedBoard(void);
 void MoveTile(int t);
 
@@ -261,40 +262,78 @@ bool won(void)
 }
 
 /**
+// make a list of tiles that can move & return these to be searched
+    // making the list constists of:
+        // a) finding the max 4 possibile positions dependent of empty space
+        // left / right / above / under
+        // b) check if possibility is on the board
+        // c) return the values on those positions
+        // return list of 4 eg {2, -1, 3, 7}
+        // 5 6 3
+        // 4 2 0
+        // 1 8 7
+*/
+
+/**
  *  Makes a list of values/tiles that the player CAN move
  *
  */
-int MakeMovableTilesArray(void){
-    // 4 cases : right, left, above, under
-    // how to do this better? switchcase? list of pointers to movable tiles ??
-    if (CheckBoundaries(emptySpace_ptr + 1)){
-        movableTiles[0] = *(emptySpace_ptr + 1);
+int MakeMovableTilesArray(emptySpcace_ptr){
+    // 4 cases : left, right, above, under
+    int* left_ptr = emptySpace_ptr - 1;
+    int* right_ptr = emptySpace_ptr + 1;
+    int* above_ptr = emptySpace_ptr + d;
+    int* under_ptr = emptySpace_ptr -d;
+    int *spaces[MT_MAX] = {left_ptr, right_ptr, above_ptr, under_ptr};
+
+    addTile(spaces[MT_MAX]);
+}
+/**
+ * Adds movable tiles to the array
+ * 
+ */
+void addTile(int* arr[n]){
+    for (int i = 0; i < n; i++){
+        if(CheckOnBoard(emptySpace_ptr, spaces[i])){
+            movableTiles[i]= **(spaces[i])
+        }
+        else{
+            movableTiles[i] = -1;
+        }
     }
-    if (CheckBoundaries(emptySpace_ptr - 1)){
-        movableTiles[1] = *(emptySpace_ptr - 1);
-    }
-    if (CheckBoundaries(emptySpace_ptr + d)){
-        movableTiles[2] = *(emptySpace_ptr + d);
-    }
-    if (CheckBoundaries(emptySpace_ptr - d)){
-        movableTiles[3] = *(emptySpace_ptr - d);
-    }
-    return 1;
 }
 
 /**
- *  Checks if the pointer points to something within the boundaries of the board
- *
- */
-bool CheckBoundaries(int* ptr){
-        // cannot be smaller than board
-        if (!(ptr < board_ptr) &&
-        // cannot be larger than board
-            !(ptr > (board_ptr + total))){
-            return true;
-            }
-        return false;
+ * Checks if the movableTile is actually on the board
+ * ie. the position is still next to empty space with board/square layout
+ * */
+ 
+bool CheckonBoard(int* ptrSpace, int* ptr2){
+    // leftmost column && left_ptr
+    if ((*ptrSpace %d == 1))
+            && (ptr2 == left_ptr){
+                return false;
+    }
+    // rightmost column && right_ptr
+    else if ((*ptrSpace %d == 0)
+            && (ptr2 == right_ptr)){
+                return false;
+    }
+    // uppermost row && above_ptr
+    else if ((ptrSpace < board_ptr + d)
+        && (ptr2 == above_ptr){
+            return false;
+    }
+    // bottommost row && under_ptr
+    else if ((ptrSpace > (total-d))
+            && (ptr2 == under_ptr)){
+            return false;
+    }
+    else{
+        return true;
+    }
 }
+
 
 /**
  *  Generates the solved board, so it can be easily compared
@@ -303,10 +342,7 @@ bool CheckBoundaries(int* ptr){
 void solvedBoard(void){
     total = d * d ;
     tiles = 0 ; // to start with
-    
-    solved_ptr = malloc( total * sizeof(int)); // 1. free memory! 2. its a kinda const, so I want it in the stack, not the heap
 
-    
     for (int i = 0; i < total ; i++){
         *(solved_ptr + i) = tiles++;
     }
@@ -317,13 +353,12 @@ void solvedBoard(void){
  * 
  */
 void MoveTile(int tile){ // this is a subfunction of move, does it need an argument?
-    // swap tile and zero; reposition emptyspace_pointer
+    // swap tile and zero
     for(int i=0;i<total;i++){
         if (*(board_ptr + i) == tile){
             *(board_ptr +i) = *emptySpace_ptr;
             *emptySpace_ptr = tile;
         }
-        //PointToEmptySpace(i); we do this at draw, so no need here
     }
 }
 /**
@@ -331,8 +366,7 @@ void MoveTile(int tile){ // this is a subfunction of move, does it need an argum
  * 
  */
 void PointToEmptySpace(int i){      // I still think it's difficult to think about what arguments to give
-        if (*(board_ptr + i) == 0){
-            emptySpace_ptr = board_ptr + i;
-        }
-    return 1;
+    if (*(board_ptr + i) == 0){
+        emptySpace_ptr = board_ptr + i;
+    }
 }
